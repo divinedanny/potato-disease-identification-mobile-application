@@ -8,7 +8,7 @@ class UploadImageSerializers(serializers.ModelSerializer):
     
     class Meta:
         model = ImageUpload
-        fields = ['image_url','prediction_text','prediction_percentage']
+        fields = ['id','image_url','prediction_text','prediction_percentage']
         
 
             

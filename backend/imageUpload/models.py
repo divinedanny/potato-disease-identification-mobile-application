@@ -13,4 +13,6 @@ class ImageUpload(models.Model):
     prediction_percentage = models.TextField(max_length=10, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.prediction_text
 

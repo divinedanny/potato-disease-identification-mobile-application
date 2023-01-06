@@ -17,6 +17,9 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+#add model path
+MODEL = os.path.join(BASE_DIR, '../../deep_learning_model/models')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -30,7 +33,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 MEDIA_URLS = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mediafiles')
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), '../mediafiles')
 
 
 # Application definition

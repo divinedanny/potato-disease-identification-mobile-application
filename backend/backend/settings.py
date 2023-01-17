@@ -18,7 +18,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 #add model path
-MODEL = os.path.join(BASE_DIR, '../../deep_learning_model/models')
+MODEL = os.path.join(BASE_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -32,8 +32,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-MEDIA_URLS = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), '../mediafiles')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Application definition
@@ -64,7 +64,7 @@ ROOT_URLCONF = "backend.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'template'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

@@ -1,46 +1,60 @@
+from distutils.core import run_setup
+from unittest import result
+import cv2
 import numpy as np
-from django.shortcuts import render
 from .models import ImageUpload
 from .serializers import UploadImageSerializers
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import generics
-from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+import tensorflow as tf
+from .apps import *
+from django.shortcuts import render
+from django.core.files.storage import default_storage
+from keras.preprocessing import image
+from keras import layers
+
 
 # Create your views here.
-# @api_view()['POST']
-class ImageView(generics.CreateAPIView):
-    queryset = ImageUpload.objects.order_by('-created')
-    serializer_class = UploadImageSerializers
-    parser_classes = (MultiPartParser, FormParser)
 
-    # def create(request, serializer):
-    #     serializer.save()
     
-    # def  
+def index(request):
+    context={"a":1}
+    return render(request, 'index.html', context)
 
 
-class ImageDisplayView(generics.ListAPIView):
-    queryset = ImageUpload.objects.all()
-    serializer_class = UploadImageSerializers
+image_size = 256
+def predictImage(request):
+    # if request.method == 'POST':
+    class_names = ['Potato___Early_blight',
+                   'Potato___Late_blight', 'Potato___healthy']
+    print(request)
+    print(request.POST.dict())
+    # print(request.FILES['filepath'])
+    file = request.FILES['filepath'].file
+    fs = default_storage
+    filepathName = fs.save("temp.jpg", file)
+    filepathName = fs.url(filepathName)
     
-class ImageDetailView(generics.RetrieveAPIView):
+    #predicting image
+    imageClassifier = ImageuploadConfig.model
+    with default_storage.open("temp.jpg") as f:
+        img = cv2.imread(f.name)
+        img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+        img = img/255
+        img = cv2.resize(img,(image_size,image_size))
+        img = np.expand_dims(img, axis=0)
+        
+        
+        result = imageClassifier.predict(img)
+        result = np.argmax(result)
+        result = class_names[result]
+        print(result)
     
-    queryset = ImageUpload.objects.all()
-    serializer_class= UploadImageSerializers
-    lookup_field = 'pk'
+    # img = image.load_img(testimage, target_size=(image_size,image_size))
     
-
-# for image_batch, label_batch in dataset.take(1):
-#     first_image = image_batch[0].numpy().astype('uint8')
-#     first_label = label_batch[0].numpy()
-
-#     print("first image to predict")
-#     plt.imshow(first_image)
-#     print(f'actual label is {class_names[first_label]}')
-
-#     batch_predict = model.predict(image_batch)
-#     predict_label = np.argmax(batch_predict[0])
-#     print(f"predicted label is {class_names[predict_label]}")
-#     plt.axis("off")
-
-
+    
+    
+    
+    context = {'filepathName': filepathName, 'result':result}
+    return render(request, 'index.html', context)
+    

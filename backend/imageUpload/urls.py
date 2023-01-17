@@ -1,9 +1,14 @@
+import django
 from django.urls import path
-from .views import ImageDetailView, ImageDisplayView, ImageView
-
+from .views import index, predictImage
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
-    path('', ImageView.as_view(), name='upload'),
-    path('history', ImageDisplayView.as_view(), name='history'),
-    path('history/<int:pk>/', ImageDetailView.as_view(),name='detail')
-]
+    path('', index, name='upload'),
+    path('predict', predictImage, name='predict'),
+    # path('history/<int:pk>/', ImageDetailView.as_view(),name='detail')
+] 
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

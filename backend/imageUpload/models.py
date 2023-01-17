@@ -9,10 +9,10 @@ def Image(instance, filename):
 
 class ImageUpload(models.Model):
     image_url = models.ImageField(upload_to=Image)
-    prediction_text = models.TextField(blank=True, null=True)
-    prediction_percentage = models.TextField(max_length=10, blank=True, null=True)
+    prediction_text = models.CharField(max_length=100, blank=True, null=True)
+    prediction_percentage = models.CharField(max_length=10, blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.prediction_text
+    # def __str__(self):
+    #     return self.prediction_text
 
